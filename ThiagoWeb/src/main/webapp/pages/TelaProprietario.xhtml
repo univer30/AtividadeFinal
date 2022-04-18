@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:p="http://primefaces.org/ui">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>Lista de proprietários</title>
+</h:head>
+<h:body>
+<p:growl id="mensagem"/>
+   <h:form id="formListagem">
+      <p:panel header="Listagem de Estados">
+        <p:dataTable id="tabela" value="#{proprietarioBean.proprietarios}" var="proprietario"
+				emptyMessage="Nenhum registro encontrado!" paginator="true"
+				rows="20">
+				
+		        <f:facet name="header">
+					<p:commandButton value="Novo" actionListener="#{proprietarioBean.novo}"
+					 oncomplete="PF('dialog').show();" update=":formCadastro:painel"  />
+				 </f:facet>	
+				 
+				 <p:column headerText="Nome" sortBy="#{proprietario.nome}"
+					filterBy="#{proprietario.nome}">
+					<h:outputText value="#{proprietario.nome}" />
+				</p:column>
+				
+				 <p:column headerText="Idade" sortBy="#{proprietario.idade}"
+					filterBy="#{proprietario.idade}">
+					<h:outputText value="#{proprietario.idade}" />
+				</p:column>
+				
+				 <p:column headerText="Telefone" sortBy="#{proprietario.telefone}"
+					filterBy="#{proprietario.telefone}">
+					<h:outputText value="#{proprietario.telefone}" />
+				</p:column>
+				
+				 <p:column headerText="Endereco" sortBy="#{proprietario.endereco}"
+					filterBy="#{proprietario.endereco}">
+					<h:outputText value="#{proprietario.endereco}" />
+				</p:column>
+				
+					<p:column headerText="Opções">
+					    <p:commandButton icon="ui-icon-trash" actionListener="#{proprietarioBean.excluir}"
+					    update=":formListagem:tabela">
+						      <p:confirm header="Confirmação" message="Deseja excluir?"
+							  icon="ui-icon-alert" />
+							  <f:attribute name="proprietarioSelecionado" value="#{proprietario}" />
+					    </p:commandButton>
+					    
+					    <p:commandButton icon="ui-icon-pencil" actionListener="#{proprietarioBean.editar}" 
+					     update=":formCadastro:painel :mensagem" oncomplete="PF('dialog').show();">
+					    <f:attribute name="proprietarioSelecionado" value="#{proprietario}" />
+					    </p:commandButton>	
+					</p:column>
+				  		
+		</p:dataTable>
+		<p:confirmDialog global="true">
+				<p:commandButton value="sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="não" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+      </p:panel>
+   
+   </h:form>
+   
+   <p:dialog header="Cadastro de Proprietario" widgetVar="dialog" modal="true"
+		draggable="false" resizable="false" closable="false">
+		
+		<h:form id="formCadastro">
+		      <h:panelGrid id="painel" columns="2">
+		         <p:outputLabel value="Nome:" />
+				 <p:inputText maxlength="40" size="30"
+					 value="#{proprietarioBean.proprietario.nome}"/>
+					
+					 <p:outputLabel value="Idade: " />
+				 <p:inputText maxlength="40" size="30"
+					 value="#{proprietarioBean.proprietario.idade}" />
+		         
+		          <p:outputLabel value="Telefone: " />
+				 <p:inputText maxlength="40" size="30"
+					 value="#{proprietarioBean.proprietario.telefone}" />
+		         
+		          <p:outputLabel value="Endereço: " />
+				 <p:inputText maxlength="40" size="30"
+					 value="#{proprietarioBean.proprietario.endereco}" />
+		         
+		
+		      </h:panelGrid>
+		      
+		      <h:panelGrid columns="2">
+				   <p:commandButton value="Salvar" actionListener="#{proprietarioBean.salvar}" />
+				    <p:commandButton value="Fechar"  oncomplete="PF('dialog').hide();" update=":formCadastro:painel :formListagem:tabela :mensagem"  />
+			  </h:panelGrid>
+		</h:form>
+		
+		</p:dialog>
+
+</h:body>
+</html>
